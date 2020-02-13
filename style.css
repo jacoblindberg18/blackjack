@@ -1,0 +1,9 @@
+span {
+    margin: 0;
+    display: inline;
+}
+
+.diamonds,
+.hearts {
+    color: rgb(160, 28, 28);
+}
