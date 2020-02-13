@@ -16,6 +16,10 @@ const stayButton = document.getElementById("stay-button");
 hitButton.style.display = "none";
 stayButton.style.display = "none";
 
+const dealerWins = "Dealer wins!";
+const playerWins = "You win!";
+const draw = "It's a draw!";
+
 //------ Function to give create the cards and give them value -------
 function createDeck(card, value) {
     for (let i = 0; i < 62; i++) {
@@ -154,7 +158,7 @@ function calculateHand(cards) {
     if (ace && score + 10 <= 21) {
         score += 10;
     }
-    console.log(score);
+    // console.log(score);
     return score;
 }
 
@@ -193,3 +197,44 @@ hitButton.addEventListener("click", function() {
     showHands();
     console.log("addEventListener", player);
 });
+
+function hasBlackJack(hand, score) {
+    if (hand === 2 && score === 21) {
+        return true;
+    }
+}
+
+function isBust(score) {
+    if (score > 21) {
+        return true;
+    }
+}
+
+function determineWinner(stayed) {
+    if (isBust(playerScore) === true) {
+        console.log(dealerWins);
+    } else if (isBust(dealerScore) === true) {
+        return playerWins;
+    } else if (dealer.length === 5 && dealerScore <= 21) {
+        return dealerWins;
+    } else if (playerScore == dealerScore) {
+        return draw;
+    } else if (playerScore > dealerScore) {
+        return playerWins;
+    } else if (dealerScore > playerScore) {
+        return dealerWins;
+    } else {
+        let dealerBJ = hasBlackJack(dealer, dealerScore);
+        let playerBJ = hasBlackJack(player, playerScore);
+        if (playerBJ === true && dealerBJ === true) {
+            return draw;
+        } else if (playerBJ === true) {
+            return playerWins;
+        } else if (dealerBJ === true) {
+            return dealerWins;
+        }
+    }
+    return "";
+}
+
+stayButton.onclick = console.log(determineWinner(true));
