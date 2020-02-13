@@ -6,15 +6,16 @@ let shuffledCards = [];
 let player = [];
 let dealer = [];
 
-const div = document.getElementById("output-area");
+const outputArea = document.getElementById("output-area");
+const winnerArea = document.getElementById("winner-area");
+
 let playerScore = [];
 let dealerScore = [];
+
 const newGameButton = document.getElementById("new-game-button");
 const hitButton = document.getElementById("hit-button");
 const stayButton = document.getElementById("stay-button");
-
-hitButton.style.display = "none";
-stayButton.style.display = "none";
+hideGameButtons();
 
 const dealerWins = "Dealer wins!";
 const playerWins = "You win!";
@@ -30,7 +31,7 @@ function createDeck(card, value) {
             };
             cards.push(playingCard);
 
-            // div.innerHTML += `<p>&#${cards[cards.length - 1].card}</p>`;
+            //outputArea.innerHTML += `<p>&#${cards[cards.length - 1].card}</p>`;
         }
         card++;
         if ((card > 127146 && card < 127151) || (card > 127162 && card < 127167) || (card > 127178 && card < 127183) || (card > 127194 && card < 127199)) {
@@ -73,7 +74,7 @@ function shuffleCards() {
     } else if (card.card > 127184 && card.card < 127199) {
         span.classList.add("clubs");
     }
-    div.append(span);
+    outputArea.append(span);
 }); */
 
 function drawCard() {
@@ -90,7 +91,7 @@ function drawCard() {
     } else if (drawnCard.card > 127184 && drawnCard.card < 127199) {
         span.classList.add("clubs");
     }
-    div.append(span);
+    outputArea.append(span);
     return drawnCard;
     // return (span.innerHTML += `&#${drawnCard.card}`);
 }
@@ -113,7 +114,7 @@ function drawCard() {
 //         return `&#${cardObject}`;
 //     });
 //     console.log(playerCards);
-//     div.innerHTML += `${listPlayer.join("")} <br> ${listDealer.join("")}`;
+//     outputArea.innerHTML += `${listPlayer.join("")} <br> ${listDealer.join("")}`;
 //     console.log(listPlayer.join(""));
 // }
 function showHand(hand, score) {
@@ -122,7 +123,6 @@ function showHand(hand, score) {
     hand.forEach(function(cardObject, index) {
         cards.push(`&#${cardObject.card}`);
     });
-    console.log(cards);
     // dealer.forEach(function(cardObject, index) {
     //     dealerCards.push(`&#${cardObject.card}`);
     // });
@@ -144,7 +144,7 @@ function dealInitialCards() {
 }
 
 function clearTable() {
-    div.innerHTML = "";
+    outputArea.innerHTML = "";
 }
 
 function calculateHand(cards) {
@@ -163,9 +163,7 @@ function calculateHand(cards) {
 }
 
 function startNewGame() {
-    newGameButton.style.display = "none";
-    hitButton.style.display = "inline";
-    stayButton.style.display = "inline";
+    showGameButtons();
 
     shuffledCards = [];
     player = [];
@@ -173,18 +171,25 @@ function startNewGame() {
 
     shuffleCards();
     dealInitialCards();
+    console.log("Dealer", dealer);
+    console.log("Player", player);
 }
 
 newGameButton.addEventListener("click", function() {
     startNewGame();
 });
 
-function showHands() {
+function showHands(stayed = false) {
     dealerScore = calculateHand(dealer);
     playerScore = calculateHand(player);
     clearTable();
-    div.innerHTML += showHand(dealer, dealerScore);
-    div.innerHTML += showHand(player, playerScore);
+    outputArea.innerHTML += showHand(dealer, dealerScore);
+    outputArea.innerHTML += showHand(player, playerScore);
+    let winner = determineWinner(stayed);
+    winnerArea.innerHTML += winner;
+    if (!winner.includes("")) {
+        hideGameButtons();
+    }
 }
 
 function dealAnotherCard(hand) {
@@ -195,7 +200,6 @@ function dealAnotherCard(hand) {
 hitButton.addEventListener("click", function() {
     dealAnotherCard(player);
     showHands();
-    console.log("addEventListener", player);
 });
 
 function hasBlackJack(hand, score) {
@@ -211,17 +215,17 @@ function isBust(score) {
 }
 
 function determineWinner(stayed) {
-    if (isBust(playerScore) === true) {
-        console.log(dealerWins);
-    } else if (isBust(dealerScore) === true) {
+    if (isBust(playerScore)) {
+        return dealerWins;
+    } else if (isBust(dealerScore)) {
         return playerWins;
     } else if (dealer.length === 5 && dealerScore <= 21) {
         return dealerWins;
-    } else if (playerScore == dealerScore) {
+    } else if (playerScore === dealerScore && stayed) {
         return draw;
-    } else if (playerScore > dealerScore) {
+    } else if (playerScore > dealerScore && stayed) {
         return playerWins;
-    } else if (dealerScore > playerScore) {
+    } else if (dealerScore > playerScore && stayed) {
         return dealerWins;
     } else {
         let dealerBJ = hasBlackJack(dealer, dealerScore);
@@ -237,4 +241,16 @@ function determineWinner(stayed) {
     return "";
 }
 
-stayButton.onclick = console.log(determineWinner(true));
+stayButton.onclick = determineWinner(true);
+
+function showGameButtons() {
+    newGameButton.style.display = "none";
+    hitButton.style.display = "inline";
+    stayButton.style.display = "inline";
+}
+
+function hideGameButtons() {
+    newGameButton.style.display = "inline";
+    hitButton.style.display = "none";
+    stayButton.style.display = "none";
+}
