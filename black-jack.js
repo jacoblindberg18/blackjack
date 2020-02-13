@@ -21,6 +21,18 @@ const dealerWins = "Dealer wins!";
 const playerWins = "You win!";
 const draw = "It's a draw!";
 
+newGameButton.addEventListener("click", function() {
+    startNewGame();
+});
+
+stayButton.addEventListener("click", function() {
+    hideGameButtons();
+    while (dealerScore < playerScore && playerScore <= 21 && dealerScore <= 21) {
+        dealer.push(drawCard());
+        showHands(true);
+    }
+});
+
 //------ Function to give create the cards and give them value -------
 function createDeck(card, value) {
     for (let i = 0; i < 62; i++) {
@@ -30,8 +42,6 @@ function createDeck(card, value) {
                 value: value
             };
             cards.push(playingCard);
-
-            //outputArea.innerHTML += `<p>&#${cards[cards.length - 1].card}</p>`;
         }
         card++;
         if ((card > 127146 && card < 127151) || (card > 127162 && card < 127167) || (card > 127178 && card < 127183) || (card > 127194 && card < 127199)) {
@@ -58,7 +68,6 @@ function shuffleCards() {
     while (tmpDeck.length > 0) {
         shuffledCards.push(tmpDeck.splice(Math.floor(Math.random() * tmpDeck.length), 1)[0]);
     }
-    console.log(shuffledCards);
 }
 
 //------ Displays all the shuffled cards in the browser ------
@@ -92,6 +101,7 @@ function drawCard() {
         span.classList.add("clubs");
     }
     outputArea.append(span);
+
     return drawnCard;
     // return (span.innerHTML += `&#${drawnCard.card}`);
 }
@@ -123,10 +133,7 @@ function showHand(hand, score) {
     hand.forEach(function(cardObject, index) {
         cards.push(`&#${cardObject.card}`);
     });
-    // dealer.forEach(function(cardObject, index) {
-    //     dealerCards.push(`&#${cardObject.card}`);
-    // });
-    // console.log(dealerCards);
+
     return `${cards.join("")} ${score} <br>`;
 }
 
@@ -163,6 +170,7 @@ function calculateHand(cards) {
 }
 
 function startNewGame() {
+    winnerArea.innerHTML = "";
     showGameButtons();
 
     shuffledCards = [];
@@ -171,13 +179,7 @@ function startNewGame() {
 
     shuffleCards();
     dealInitialCards();
-    console.log("Dealer", dealer);
-    console.log("Player", player);
 }
-
-newGameButton.addEventListener("click", function() {
-    startNewGame();
-});
 
 function showHands(stayed = false) {
     dealerScore = calculateHand(dealer);
@@ -216,6 +218,7 @@ function isBust(score) {
 
 function determineWinner(stayed) {
     if (isBust(playerScore)) {
+        hideGameButtons();
         return dealerWins;
     } else if (isBust(dealerScore)) {
         return playerWins;
