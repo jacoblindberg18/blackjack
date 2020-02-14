@@ -23,6 +23,7 @@ const draw = "It's a draw!";
 
 newGameButton.addEventListener("click", function() {
     startNewGame();
+    console.log("player", player);
 });
 
 stayButton.addEventListener("click", function() {
@@ -205,7 +206,7 @@ hitButton.addEventListener("click", function() {
 });
 
 function hasBlackJack(hand, score) {
-    if (hand === 2 && score === 21) {
+    if (hand.length === 2 && score === 21) {
         return true;
     }
 }
@@ -225,7 +226,7 @@ function determineWinner(stayed) {
     } else if (dealer.length === 5 && dealerScore <= 21) {
         return dealerWins;
     } else if (playerScore === dealerScore && stayed) {
-        return draw;
+        return dealerWins;
     } else if (playerScore > dealerScore && stayed) {
         return playerWins;
     } else if (dealerScore > playerScore && stayed) {
@@ -236,8 +237,10 @@ function determineWinner(stayed) {
         if (playerBJ === true && dealerBJ === true) {
             return draw;
         } else if (playerBJ === true) {
+            hideGameButtons();
             return playerWins;
         } else if (dealerBJ === true) {
+            hideGameButtons();
             return dealerWins;
         }
     }
