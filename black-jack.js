@@ -23,7 +23,6 @@ const draw = "It's a draw!";
 
 newGameButton.addEventListener("click", function() {
     startNewGame();
-    console.log("player", player);
 });
 
 stayButton.addEventListener("click", function() {
@@ -189,7 +188,7 @@ function showHands(stayed = false) {
     outputArea.innerHTML += showHand(dealer, dealerScore);
     outputArea.innerHTML += showHand(player, playerScore);
     let winner = determineWinner(stayed);
-    winnerArea.innerHTML += winner;
+    winnerArea.innerHTML = winner;
     if (!winner.includes("")) {
         hideGameButtons();
     }
@@ -247,7 +246,9 @@ function determineWinner(stayed) {
     return "";
 }
 
-stayButton.onclick = determineWinner(true);
+stayButton.addEventListener("click", () => {
+    determineWinner(true)
+});
 
 function showGameButtons() {
     newGameButton.style.display = "none";
