@@ -9,8 +9,8 @@ let dealer = [];
 const outputArea = document.getElementById("output-area");
 const winnerArea = document.getElementById("winner-area");
 
-let playerScore = [];
-let dealerScore = [];
+let playerScore = 0;
+let dealerScore = 0;
 
 const newGameButton = document.getElementById("new-game-button");
 const hitButton = document.getElementById("hit-button");
