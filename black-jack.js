@@ -247,7 +247,7 @@ function determineWinner(stayed) {
 }
 
 stayButton.addEventListener("click", () => {
-    determineWinner(true)
+    showHands(true);
 });
 
 function showGameButtons() {
