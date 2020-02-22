@@ -261,5 +261,3 @@ function hideGameButtons() {
     hitButton.style.display = "none";
     stayButton.style.display = "none";
 }
-
-console.log("hej");
