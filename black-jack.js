@@ -70,22 +70,6 @@ function shuffleCards() {
     }
 }
 
-//------ Displays all the shuffled cards in the browser ------
-/* shuffledCards.forEach(function(card, index) {
-    let span = document.createElement("span");
-    span.innerHTML = `&#${card.card}`;
-    if (card.card > 127136 && card.card < 127151) {
-        span.classList.add("spades");
-    } else if (card.card > 127152 && card.card < 127167) {
-        span.classList.add("hearts");
-    } else if (card.card > 127168 && card.card < 127183) {
-        span.classList.add("diamonds");
-    } else if (card.card > 127184 && card.card < 127199) {
-        span.classList.add("clubs");
-    }
-    outputArea.append(span);
-}); */
-
 function drawCard() {
     let drawnCard = shuffledCards.shift();
 
@@ -103,30 +87,8 @@ function drawCard() {
     outputArea.append(span);
 
     return drawnCard;
-    // return (span.innerHTML += `&#${drawnCard.card}`);
 }
 
-// function showHands() {
-//     let playerCards = [];
-//     let dealerCards = [];
-
-//     player.forEach(function(cardObject, index) {
-//         playerCards.push(cardObject.card);
-//     });
-//     dealer.forEach(function(cardObject, index) {
-//         dealerCards.push(cardObject.card);
-//     });
-
-//     let listPlayer = playerCards.map(function(cardObject) {
-//         return `&#${cardObject}`;
-//     });
-//     let listDealer = dealerCards.map(function(cardObject) {
-//         return `&#${cardObject}`;
-//     });
-//     console.log(playerCards);
-//     outputArea.innerHTML += `${listPlayer.join("")} <br> ${listDealer.join("")}`;
-//     console.log(listPlayer.join(""));
-// }
 function showHand(hand, score) {
     let cards = [];
 
@@ -143,10 +105,6 @@ function dealInitialCards() {
     player.push(drawCard());
     dealer.push(drawCard());
     dealer.push(drawCard());
-    // dealerScore = calculateHand(dealer);
-    // playerScore = calculateHand(player);
-    // showHand(dealer, dealerScore);
-    // showHand(player, playerScore);
     showHands();
 }
 
@@ -165,7 +123,6 @@ function calculateHand(cards) {
     if (ace && score + 10 <= 21) {
         score += 10;
     }
-    // console.log(score);
     return score;
 }
 
@@ -185,8 +142,8 @@ function showHands(stayed = false) {
     dealerScore = calculateHand(dealer);
     playerScore = calculateHand(player);
     clearTable();
-    outputArea.innerHTML += showHand(dealer, dealerScore);
-    outputArea.innerHTML += showHand(player, playerScore);
+    outputArea.innerHTML += "D: " + showHand(dealer, dealerScore);
+    outputArea.innerHTML += "P: "+ showHand(player, playerScore);
     let winner = determineWinner(stayed);
     winnerArea.innerHTML = winner;
     if (!winner.includes("")) {
